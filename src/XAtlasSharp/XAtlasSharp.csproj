@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Condition="'$(Configuration)'=='Debug'" Include="..\XAtlas\XAtlasCppDll.vcxproj" />
+  </ItemGroup>
+
+</Project>

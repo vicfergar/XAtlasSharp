@@ -1,0 +1,9 @@
+<Project ToolsVersion="12.0" DefaultTargets="Build" 
+	xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<SwigPathDir>C:\Users\vferrer\Downloads\swigwin-4.0.2</SwigPathDir>
+		<CSWrapperOutDir>$(MSBuildThisFileDirectory)XAtlasSharp\Wrapper</CSWrapperOutDir>
+	</PropertyGroup>
+
+</Project>
