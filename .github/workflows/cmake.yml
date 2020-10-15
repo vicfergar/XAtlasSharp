@@ -22,7 +22,7 @@ jobs:
         include:
           - os: windows-latest
             platform: x86
-            config_args: "-G \"Visual Studio 16 2019\" -A \"x86\""
+            config_args: "-G \"Visual Studio 16 2019\""
           - os: windows-latest
             platform: ARM
             config_args: "-G \"Visual Studio 16 2019\" -A \"ARM\""
