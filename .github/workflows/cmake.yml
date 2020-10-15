@@ -18,13 +18,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
+        platform: [x64]
         include:
           - os: windows-latest
-            triplet: x64-windows
-          - os: ubuntu-latest
-            triplet: x64-linux
-          - os: macos-latest
-            triplet: x64-osx
+            generator: "Visual Studio 15 2017"
+            platform: x86
 
     steps:
     - uses: actions/checkout@v2
@@ -32,21 +30,39 @@ jobs:
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
       # We'll use this as our working directory for all subsequent commands
-      run: cmake -E make_directory ${{runner.workspace}}/build
+      run: cmake -E make_directory ${{runner.workspace}}/build${{matrix.platform}}
 
     - name: Configure CMake
       # Use a bash shell so we can use the same syntax for environment variable
       # access regardless of the host operating system
       shell: bash
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{runner.workspace}}/build${{matrix.platform}}
       # Note the current convention is to use the -S and -B options here to specify source 
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
     - name: Build
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{runner.workspace}}/build${{matrix.platform}}
       shell: bash
+      # Execute the build.  You can specify a specific target with "--target <NAME>"
+      run: cmake --build . --config $BUILD_TYPE
+      
+    - name: Configure CMake
+      # Use a bash shell so we can use the same syntax for environment variable
+      # access regardless of the host operating system
+      shell: bash
+      if: ${{ matrix.generator != null }}
+      working-directory: ${{runner.workspace}}/build${{matrix.platform}}
+      # Note the current convention is to use the -S and -B options here to specify source 
+      # and build directories, but this is only available with CMake 3.13 and higher.  
+      # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -G ${{ matrix.generator }}
+
+    - name: Build
+      working-directory: ${{runner.workspace}}/build${{matrix.platform}}
+      shell: bash
+      if: ${{ matrix.generator != null }}
       # Execute the build.  You can specify a specific target with "--target <NAME>"
       run: cmake --build . --config $BUILD_TYPE
       
@@ -55,6 +71,6 @@ jobs:
       with:
         name: ${{ matrix.os }}
         path: |
-          ${{runner.workspace}}/build/*.so
-          ${{runner.workspace}}/build/*.dylib
-          ${{runner.workspace}}/build/Release/*.dll
+          ${{runner.workspace}}/build*/**/*.so
+          ${{runner.workspace}}/build*/**/.dylib
+          ${{runner.workspace}}/build*/**/*.dll
