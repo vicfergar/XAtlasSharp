@@ -22,10 +22,10 @@ jobs:
         include:
           - os: windows-latest
             platform: x86
-            congif_args: "-G \"Visual Studio 16 2019\" -A \"x86\""
+            config_args: "-G \"Visual Studio 16 2019\" -A \"x86\""
           - os: windows-latest
             platform: ARM
-            congif_args: "-G \"Visual Studio 16 2019\" -A \"ARM\""
+            config_args: "-G \"Visual Studio 16 2019\" -A \"ARM\""
 
     steps:
     - uses: actions/checkout@v2
@@ -43,7 +43,7 @@ jobs:
       # Note the current convention is to use the -S and -B options here to specify source 
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE ${{matrix.config_args}}
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
