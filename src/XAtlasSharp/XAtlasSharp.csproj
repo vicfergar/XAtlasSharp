@@ -1,11 +1,37 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.0.0</Version>
+    <Authors>Victor Ferrer</Authors>
+    <Description>XAtlas C# wrapper</Description>
+    <Copyright>Copyright (c) 2020 Victor Ferrer</Copyright>
+    <PackageProjectUrl>https://github.com/vicfergar/XAtlasSharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/vicfergar/XAtlasSharp/tree/master/src</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>XAtlas Atlas Chart Pack Unwrap C# Native</PackageTags>
+    <RootNamespace>XAtlasSharp</RootNamespace>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>$(SolutionDir)NuGet\</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Condition="'$(Configuration)'=='Debug'" Include="..\XAtlas\XAtlasCppDll.vcxproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="build\**" PackagePath="build" Pack="true" />
+    <Content Include="runtimes\**" PackagePath="runtimes" Pack="true" />
+    <Content Include="lib\**" PackagePath="lib" Pack="true" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="Exists('$(SolutionDir)..\LICENSE')">
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+  </PropertyGroup>
+  <ItemGroup Condition="Exists('$(SolutionDir)..\LICENSE')">
+    <Content Include="$(SolutionDir)..\LICENSE" PackagePath="" Pack="true" />
   </ItemGroup>
 
 </Project>

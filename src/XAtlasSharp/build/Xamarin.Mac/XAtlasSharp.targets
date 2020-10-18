@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="CopyXAtlasSharpBundleLibrary" AfterTargets="BeforeBuild">
+    <Copy
+      SourceFiles="$(MSBuildThisFileDirectory)..\..\runtimes\osx-x64\native\libXAtlas_wrap.dylib"
+      DestinationFiles="$(AppBundleDir)/Contents/MonoBundle/libXAtlas_wrap"/>
+  </Target>
+
+</Project>

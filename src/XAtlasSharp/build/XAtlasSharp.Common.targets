@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <XAtlasSharpTargetSystem Condition="'$(XAtlasSharpTargetSystem)' == '' and '$(OS)' == 'Windows_NT'">win</XAtlasSharpTargetSystem>
+    <XAtlasSharpTargetSystem Condition="'$(XAtlasSharpTargetSystem)' == '' and '$(OS)' == 'UNIX' and Exists('/Applications')">osx</XAtlasSharpTargetSystem>
+    <XAtlasSharpTargetSystem Condition="'$(XAtlasSharpTargetSystem)' == '' and '$(OS)' == 'UNIX'">linux</XAtlasSharpTargetSystem>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- handle PlatformTarget specifically -->
+    <XAtlasSharpTargetPlatform Condition="'$(XAtlasSharpTargetPlatform)' == '' and '$(PlatformTarget)' == 'ARM'">arm</XAtlasSharpTargetPlatform>
+    <XAtlasSharpTargetPlatform Condition="'$(XAtlasSharpTargetPlatform)' == '' and '$(PlatformTarget)' == 'ARM64'">arm64</XAtlasSharpTargetPlatform>
+    <XAtlasSharpTargetPlatform Condition="'$(XAtlasSharpTargetPlatform)' == '' and '$(PlatformTarget)' == 'x86'">x86</XAtlasSharpTargetPlatform>
+    <XAtlasSharpTargetPlatform Condition="'$(XAtlasSharpTargetPlatform)' == '' and '$(PlatformTarget)' == 'x64'">x64</XAtlasSharpTargetPlatform>
+    <!-- handle Any CPU, considering Prefer32Bit -->
+    <XAtlasSharpTargetPlatform Condition="'$(XAtlasSharpTargetPlatform)' == '' and '$(Prefer32Bit)' == 'False'">x64</XAtlasSharpTargetPlatform>
+    <XAtlasSharpTargetPlatform Condition="'$(XAtlasSharpTargetPlatform)' == '' and '$(Prefer32Bit)' == 'True'">x86</XAtlasSharpTargetPlatform>
+    <!-- fall back to x64 on 64-bit machines -->
+    <XAtlasSharpTargetPlatform Condition="'$(XAtlasSharpTargetPlatform)' == '' and $([System.Environment]::Is64BitOperatingSystem)">x64</XAtlasSharpTargetPlatform>
+    <!-- fall back to x86 -->
+    <XAtlasSharpTargetPlatform Condition="'$(XAtlasSharpTargetPlatform)' == ''">x86</XAtlasSharpTargetPlatform>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <XAtlasSharpNativeLibrary Condition="'$(XAtlasSharpTargetSystem)' == 'win'">$(MSBuildThisFileDirectory)..\..\runtimes\$(XAtlasSharpTargetSystem)-$(XAtlasSharpTargetPlatform)\native\libXAtlas_wrap.dll</XAtlasSharpNativeLibrary>
+    <XAtlasSharpNativeLibrary Condition="'$(XAtlasSharpTargetSystem)' == 'osx'">$(MSBuildThisFileDirectory)..\..\runtimes\$(XAtlasSharpTargetSystem)-$(XAtlasSharpTargetPlatform)\native\libXAtlas_wrap.bundle</XAtlasSharpNativeLibrary>
+    <XAtlasSharpNativeLibrary Condition="'$(XAtlasSharpTargetSystem)' == 'linux'">$(MSBuildThisFileDirectory)..\..\runtimes\$(XAtlasSharpTargetSystem)-$(XAtlasSharpTargetPlatform)\native\libXAtlas_wrap.so</XAtlasSharpNativeLibrary>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(XAtlasSharpNativeLibrary)" Condition="Exists('$(XAtlasSharpNativeLibrary)')">
+      <Link>$([System.IO.Path]::GetFilename('$(XAtlasSharpNativeLibrary)'))</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
