@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "XAtlasSharpTest": {
+      "commandName": "Project",
+      "commandLineArgs": "../../../../../models/cube.obj -verbose",
+      "nativeDebugging": true
+    }
+  }
+}
